@@ -1,6 +1,10 @@
 {
   "name": "canvas-animations",
   "version": "1.0.0",
+  "module": "dist/index.es.js",
+  "browser": "dist/index.umd.js",
+  "license": "MIT",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/t28hub/canvas-animations.git"
@@ -13,8 +17,6 @@
     "name": "Tatsuya Maki",
     "url": "https://github.com/t28hub"
   },
-  "license": "MIT",
-  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
