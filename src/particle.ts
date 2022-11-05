@@ -1,6 +1,6 @@
 import { Context } from './context';
 import { Drawable } from './drawable';
-import { Point } from './point';
+import { Distance, DistanceMeasure, EuclideanDistance, Point } from './math';
 
 export class Particle implements Drawable {
   private readonly center: Point;
@@ -39,5 +39,15 @@ export class Particle implements Drawable {
     renderingContext.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2, false);
     renderingContext.closePath();
     renderingContext.fill();
+  }
+
+  /**
+   * Compute the distance to the other particle.
+   * @param other The other particle.
+   * @param distanceMeasure The {@link DistanceMeasure} to be used.
+   * @return The distance to the other particle.
+   */
+  distanceTo(other: Particle, distanceMeasure: DistanceMeasure = EuclideanDistance): Distance {
+    return distanceMeasure(this.center, other.center);
   }
 }

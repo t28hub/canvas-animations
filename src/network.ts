@@ -1,8 +1,7 @@
-import { Bounds } from './bounds';
 import { Context } from './context';
 import { Drawable } from './drawable';
+import { Bounds, Point } from './math';
 import { Particle } from './particle';
-import { Point } from './point';
 
 export class Network implements Drawable {
   constructor(private readonly particles: ReadonlyArray<Particle>) {}
@@ -28,6 +27,11 @@ export class Network implements Drawable {
     for (let i = index; i >= 0; i--) {
       const other = this.particles.at(i);
       if (!other) {
+        continue;
+      }
+
+      const distance = particle.distanceTo(other);
+      if (distance > 100) {
         continue;
       }
 

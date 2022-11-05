@@ -1,4 +1,4 @@
-import { Bounds } from './bounds';
+import { Bounds } from './math/bounds';
 import { Network } from './network';
 import { Renderer } from './renderer';
 

@@ -1,6 +1,6 @@
-import { Bounds } from './bounds';
 import { Context } from './context';
 import { Drawable } from './drawable';
+import { Bounds } from './math/bounds';
 
 const NO_ANIMATION_ID = -1;
 

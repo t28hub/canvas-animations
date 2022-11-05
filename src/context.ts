@@ -1,4 +1,4 @@
-import { Bounds } from './bounds';
+import { Bounds } from './math/bounds';
 
 export interface Context {
   readonly width: number;
