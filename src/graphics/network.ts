@@ -53,7 +53,7 @@ export class Network implements Drawable {
     const minX = bounds.min.x;
     const minY = bounds.min.y;
     const particles = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 250; i++) {
       const initialPoint = {
         x: minX + Math.random() * bounds.extentX,
         y: minY + Math.random() * bounds.extentY,

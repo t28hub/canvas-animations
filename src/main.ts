@@ -8,7 +8,11 @@ export function draw(canvas: HTMLCanvasElement) {
     throw new TypeError(`Failed to retrieve '2d' context from canvas(${canvas})`);
   }
 
-  context.globalAlpha = 0.2;
+  context.fillStyle = 'rgba(255, 255, 255, 1.0)';
+  context.strokeStyle = 'rgba(255, 255, 255, 1.0)';
+  context.globalAlpha = 0.1;
+  context.save();
+
   const bounds = new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height });
   const renderer = new Renderer(bounds, Network.random(bounds));
   renderer.render(context);

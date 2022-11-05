@@ -8,19 +8,34 @@
       * {
         margin: 0;
         padding: 0;
+        background: black;
       }
     </style>
   </head>
   <body>
     <div id="app">
-      <canvas id="main" width="800" height="450"></canvas>
+      <canvas id="main"></canvas>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="./src/main.ts"></script>
     <script type="module">
+      import * as Stats from 'stats.js';
       import { draw } from './src/main';
 
       const canvas = document.getElementById('main');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
       draw(canvas);
+
+      const stats = new Stats();
+      stats.showPanel(0);
+      document.body.append(stats.dom);
+
+      const frame = () => {
+        stats.begin();
+        stats.end();
+        requestAnimationFrame(frame);
+      };
+      frame();
     </script>
   </body>
 </html>
