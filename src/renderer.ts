@@ -1,28 +1,26 @@
-import { Particle } from './particle';
+import { Bounds } from './bounds';
+import { Context } from './context';
+import { Drawable } from './drawable';
 
 const NO_ANIMATION_ID = -1;
 
 export class Renderer {
-  private readonly particles: ReadonlyArray<Particle>;
+  private readonly context: Omit<Context, 'renderingContext'>;
   private animationId: number;
 
-  constructor(maxX: number, maxY: number) {
-    const particles = [];
-    for (let i = 0; i < 50; i++) {
-      particles.push(new Particle({ x: Math.random() * maxX, y: Math.random() * maxY }, 2, 1));
-    }
-    this.particles = particles;
+  constructor(bounds: Bounds, private readonly drawable: Drawable) {
+    this.context = { width: bounds.extentX, height: bounds.extentY, bounds };
     this.animationId = NO_ANIMATION_ID;
   }
 
-  start(context: CanvasRenderingContext2D) {
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    this.particles.forEach((particle: Particle) => {
-      particle.update();
-      particle.draw(context);
-    });
+  start(renderingContext: CanvasRenderingContext2D) {
+    const newContext: Context = { ...this.context, renderingContext };
+    this.drawable.update(newContext);
+    this.drawable.draw(newContext);
 
-    this.animationId = requestAnimationFrame(() => this.start(context));
+    this.animationId = requestAnimationFrame(() => {
+      this.start(renderingContext)
+    });
   }
 
   cancel() {

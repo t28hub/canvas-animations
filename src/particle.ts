@@ -1,11 +1,8 @@
 import { Point } from './point';
+import { Drawable } from './drawable';
+import { Context } from './context';
 
-const MIN_X = 0;
-const MAX_X = 800;
-const MIN_Y = 0;
-const MAX_Y = 450;
-
-export class Particle {
+export class Particle implements Drawable {
   private readonly center: Point;
   private readonly radius: number;
   private velocityX: number;
@@ -22,22 +19,25 @@ export class Particle {
     return this.center;
   }
 
-  update() {
+  update({ bounds }: Context) {
     this.center.x += this.velocityX;
     this.center.y += this.velocityY;
 
-    if (this.center.x < MIN_X || this.center.x > MAX_X) {
+    if (bounds.contains(this.center)) {
+      return;
+    }
+    if (!bounds.containsX(this.center.x)) {
       this.velocityX *= -1.0;
     }
-    if (this.center.y < MIN_Y || this.center.y > MAX_Y) {
+    if (!bounds.containsY(this.center.y)) {
       this.velocityY *= -1.0;
     }
   }
 
-  draw(context: CanvasRenderingContext2D) {
-    context.beginPath();
-    context.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2, false);
-    context.closePath();
-    context.fill();
+  draw({ renderingContext }: Context) {
+    renderingContext.beginPath();
+    renderingContext.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2, false);
+    renderingContext.closePath();
+    renderingContext.fill();
   }
 }
