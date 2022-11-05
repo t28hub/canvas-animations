@@ -1,16 +1,18 @@
+import { Bounds, Point } from '../math';
+
 import { Context } from './context';
 import { Drawable } from './drawable';
-import { Bounds, Point } from './math';
 import { Particle } from './particle';
 
 export class Network implements Drawable {
   constructor(private readonly particles: ReadonlyArray<Particle>) {}
 
-  update({ width, height, renderingContext }: Context) {
-    renderingContext.clearRect(0, 0, width, height);
-  }
+  update(_: Context) {}
 
   draw(context: Context) {
+    const { width, height, renderingContext } = context;
+    renderingContext.clearRect(0, 0, width, height);
+
     this.particles.forEach((particle: Particle) => {
       particle.update(context);
       particle.draw(context);
@@ -51,7 +53,7 @@ export class Network implements Drawable {
     const minX = bounds.min.x;
     const minY = bounds.min.y;
     const particles = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 100; i++) {
       const initialPoint = {
         x: minX + Math.random() * bounds.extentX,
         y: minY + Math.random() * bounds.extentY,

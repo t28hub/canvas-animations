@@ -1,6 +1,7 @@
+import { Distance, DistanceMeasure, EuclideanDistance, Point } from '../math';
+
 import { Context } from './context';
 import { Drawable } from './drawable';
-import { Distance, DistanceMeasure, EuclideanDistance, Point } from './math';
 
 export class Particle implements Drawable {
   private readonly center: Point;

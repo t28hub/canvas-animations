@@ -1,9 +1,13 @@
+import { Bounds } from '../math';
+
 import { Context } from './context';
 import { Drawable } from './drawable';
-import { Bounds } from './math/bounds';
 
 const NO_ANIMATION_ID = -1;
 
+/**
+ * Renderer rendering drawable components to the given rendering context.
+ */
 export class Renderer {
   private readonly context: Omit<Context, 'renderingContext'>;
   private animationId: number;
@@ -13,13 +17,13 @@ export class Renderer {
     this.animationId = NO_ANIMATION_ID;
   }
 
-  start(renderingContext: CanvasRenderingContext2D) {
+  render(renderingContext: CanvasRenderingContext2D) {
     const newContext: Context = { ...this.context, renderingContext };
     this.drawable.update(newContext);
     this.drawable.draw(newContext);
 
     this.animationId = requestAnimationFrame(() => {
-      this.start(renderingContext);
+      this.render(renderingContext);
     });
   }
 

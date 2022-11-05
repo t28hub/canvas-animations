@@ -1,6 +1,6 @@
-import { Bounds } from './math/bounds';
-import { Network } from './network';
-import { Renderer } from './renderer';
+import { Network } from './graphics/network';
+import { Renderer } from './graphics/renderer';
+import { Bounds } from './math';
 
 export function draw(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d');
@@ -11,5 +11,5 @@ export function draw(canvas: HTMLCanvasElement) {
   context.globalAlpha = 0.2;
   const bounds = new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height });
   const renderer = new Renderer(bounds, Network.random(bounds));
-  renderer.start(context);
+  renderer.render(context);
 }
