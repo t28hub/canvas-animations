@@ -1,6 +1,6 @@
-import { Point } from './point';
-import { Drawable } from './drawable';
 import { Context } from './context';
+import { Drawable } from './drawable';
+import { Point } from './point';
 
 export class Particle implements Drawable {
   private readonly center: Point;

@@ -19,7 +19,7 @@ export class Renderer {
     this.drawable.draw(newContext);
 
     this.animationId = requestAnimationFrame(() => {
-      this.start(renderingContext)
+      this.start(renderingContext);
     });
   }
 

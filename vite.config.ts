@@ -1,5 +1,6 @@
 import * as path from 'path';
-import { defineConfig } from 'vite'
+
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
@@ -8,6 +9,6 @@ export default defineConfig({
       name: 'CanvasAnimations',
       formats: ['es', 'umd'],
       fileName: (format) => `canvas-animations.${format}.js`,
-    }
-  }
+    },
+  },
 });

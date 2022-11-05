@@ -1,7 +1,6 @@
-Canvas Animations
-=====
-[![Build project](https://github.com/t28hub/canvas-animations/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/t28hub/canvas-animations/actions/workflows/build.yml)
+# Canvas Animations
 
+[![Build project](https://github.com/t28hub/canvas-animations/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/t28hub/canvas-animations/actions/workflows/build.yml)
 
 ## License
 

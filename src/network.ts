@@ -5,8 +5,7 @@ import { Particle } from './particle';
 import { Point } from './point';
 
 export class Network implements Drawable {
-  constructor(private readonly particles: ReadonlyArray<Particle>) {
-  }
+  constructor(private readonly particles: ReadonlyArray<Particle>) {}
 
   update({ width, height, renderingContext }: Context) {
     renderingContext.clearRect(0, 0, width, height);

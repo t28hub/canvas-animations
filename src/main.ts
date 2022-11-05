@@ -1,6 +1,6 @@
-import { Renderer } from './renderer';
 import { Bounds } from './bounds';
 import { Network } from './network';
+import { Renderer } from './renderer';
 
 export function draw(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d');
