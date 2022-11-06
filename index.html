@@ -14,18 +14,20 @@
   </head>
   <body>
     <div id="app">
-      <canvas id="main"></canvas>
+      <canvas id="screen"></canvas>
     </div>
     <script type="module" src="./src/main.ts"></script>
     <script type="module">
       import * as Stats from 'stats.js';
-      import { draw } from './src/main';
+      import { create } from './src/main';
 
-      const canvas = document.getElementById('main');
+      // Configure canvas-animations
+      const canvas = document.getElementById('screen');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      draw(canvas);
+      create(canvas).render();
 
+      // Configure stats.js
       const stats = new Stats();
       stats.showPanel(0);
       document.body.append(stats.dom);

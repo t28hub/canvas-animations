@@ -1,7 +1,6 @@
 import { Distance, DistanceMeasure, EuclideanDistance, Point } from '../math';
 
-import { Context } from './context';
-import { Drawable } from './drawable';
+import { Drawable, DrawableContext } from './drawable';
 
 export class Particle implements Drawable {
   private readonly center: Point;
@@ -20,7 +19,7 @@ export class Particle implements Drawable {
     return this.center;
   }
 
-  update({ bounds }: Context) {
+  update({ bounds }: DrawableContext) {
     this.center.x += this.velocityX;
     this.center.y += this.velocityY;
 
@@ -35,11 +34,11 @@ export class Particle implements Drawable {
     }
   }
 
-  draw({ renderingContext }: Context) {
-    renderingContext.beginPath();
-    renderingContext.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2, false);
-    renderingContext.closePath();
-    renderingContext.fill();
+  draw({ context }: DrawableContext) {
+    context.beginPath();
+    context.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2, false);
+    context.closePath();
+    context.fill();
   }
 
   /**

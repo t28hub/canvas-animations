@@ -11,4 +11,7 @@ export default defineConfig({
       fileName: (format) => `canvas-animations.${format}.js`,
     },
   },
+  worker: {
+    format: 'iife',
+  },
 });

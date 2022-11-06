@@ -1,19 +1,18 @@
-import { Network } from './graphics/network';
-import { Renderer } from './graphics/renderer';
-import { Bounds } from './math';
+import { CanvasRenderer, Renderer, WorkerRenderer } from './graphics';
+import { isUndefined } from './utils/guards';
 
-export function draw(canvas: HTMLCanvasElement) {
-  const context = canvas.getContext('2d');
-  if (!context) {
-    throw new TypeError(`Failed to retrieve '2d' context from canvas(${canvas})`);
+/**
+ * Create a {@link Renderer} instance from a canvas element.
+ *
+ * @param canvas The canvas element.
+ * @return The optimal renderer instance.
+ */
+export function create(canvas: HTMLCanvasElement): Renderer {
+  if (isUndefined(window)) {
+    throw new Error('This function does not run on the server');
   }
-
-  context.fillStyle = 'rgba(255, 255, 255, 1.0)';
-  context.strokeStyle = 'rgba(255, 255, 255, 1.0)';
-  context.globalAlpha = 0.1;
-  context.save();
-
-  const bounds = new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height });
-  const renderer = new Renderer(bounds, Network.random(bounds));
-  renderer.render(context);
+  if (isUndefined(window.OffscreenCanvas)) {
+    return new CanvasRenderer(canvas);
+  }
+  return new WorkerRenderer(canvas.transferControlToOffscreen());
 }
