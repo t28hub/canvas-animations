@@ -25,7 +25,7 @@
       const canvas = document.getElementById('screen');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      create(canvas).render();
+      create(canvas).play({ kind: 'network', amount: 250, radius: 1, speed: 0.1 });
 
       // Configure stats.js
       const stats = new Stats();

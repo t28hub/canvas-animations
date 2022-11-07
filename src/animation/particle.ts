@@ -1,8 +1,20 @@
-import { Distance, DistanceMeasure, EuclideanDistance, Point } from '../math';
+import { Bounds, Distance, DistanceMeasure, EuclideanDistance, Point } from '../math';
 
-import { Drawable, DrawableContext } from './drawable';
+import { Component, Context } from './component';
 
-export class Particle implements Drawable {
+export type Options = {
+  readonly kind: 'particle';
+  readonly radius: number;
+  readonly speed: number;
+};
+
+const defaults: Options = {
+  kind: 'particle',
+  radius: 1,
+  speed: 0.5,
+};
+
+export class Particle implements Component<Options> {
   private readonly center: Point;
   private readonly radius: number;
   private velocityX: number;
@@ -19,7 +31,7 @@ export class Particle implements Drawable {
     return this.center;
   }
 
-  update({ bounds }: DrawableContext) {
+  update({ bounds }: Context<Options>) {
     this.center.x += this.velocityX;
     this.center.y += this.velocityY;
 
@@ -34,7 +46,7 @@ export class Particle implements Drawable {
     }
   }
 
-  draw({ context }: DrawableContext) {
+  render({ context }: Context<Options>) {
     context.beginPath();
     context.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2, false);
     context.closePath();
@@ -49,5 +61,14 @@ export class Particle implements Drawable {
    */
   distanceTo(other: Particle, distanceMeasure: DistanceMeasure = EuclideanDistance): Distance {
     return distanceMeasure(this.center, other.center);
+  }
+
+  static create(bounds: Bounds, options: Partial<Options> = {}): Particle {
+    const { radius, speed } = { ...defaults, ...options };
+    const center = {
+      x: bounds.min.x + Math.random() * bounds.extentX,
+      y: bounds.min.y + Math.random() * bounds.extentY,
+    };
+    return new Particle(center, radius, speed);
   }
 }
