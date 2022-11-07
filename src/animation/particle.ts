@@ -1,3 +1,4 @@
+import { Color } from '../color';
 import { Distance, DistanceMeasure, EuclideanDistance, Point } from '../math';
 
 import { Component, Context } from './component';
@@ -9,11 +10,13 @@ export type Options = {
   readonly color: string;
 };
 
+const defaultColor = Color.random().format();
+
 const defaults: Options = {
   kind: 'particle',
   radius: 1,
   speed: 0.5,
-  color: 'rgba(225, 255, 255, 1.0)',
+  color: defaultColor,
 };
 
 export class Particle implements Component<Options> {
@@ -49,6 +52,7 @@ export class Particle implements Component<Options> {
   render({ context }: Context) {
     const { color, radius } = this.options;
     context.fillStyle = color;
+
     context.beginPath();
     context.arc(this.center.x, this.center.y, radius, 0, Math.PI * 2, false);
     context.closePath();

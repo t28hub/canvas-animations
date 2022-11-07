@@ -1,5 +1,5 @@
 import { CanvasPlayer, Player, WorkerPlayer } from './player';
-import { isUndefined } from './utils/guards';
+import { isUndefined } from './utils';
 
 /**
  * Create a {@link Player} instance from a canvas element.

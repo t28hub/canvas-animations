@@ -1,3 +1,4 @@
+import { Color } from '../color';
 import { Point } from '../math';
 import { RenderingContext2D } from '../types';
 
@@ -44,6 +45,8 @@ export type Options = {
   readonly lineWidth: number;
 };
 
+const defaultColor = Color.random().format();
+
 /**
  * The default options of {@link Options}.
  */
@@ -52,8 +55,8 @@ const defaults: Options = {
   amount: 100,
   radius: 1,
   speed: 0.5,
-  fillColor: 'rgba(255, 255, 255, 1.0)',
-  lineColor: 'rgba(255, 255, 255, 1.0)',
+  fillColor: defaultColor,
+  lineColor: defaultColor,
   lineWidth: 1.0,
 };
 
@@ -102,6 +105,7 @@ export class Network implements Component<Options> {
     renderingContext.lineCap = 'round';
     renderingContext.lineWidth = lineWidth;
     renderingContext.strokeStyle = lineColor;
+
     renderingContext.beginPath();
     renderingContext.moveTo(point1.x, point1.y);
     renderingContext.lineTo(point2.x, point2.y);

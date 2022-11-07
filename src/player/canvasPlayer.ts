@@ -23,7 +23,6 @@ export class CanvasPlayer implements Player {
 
   play<T extends Options>(options: Partial<T>) {
     const animation = create(this.context, options);
-    console.info({ animation });
     const frame = () => {
       animation.update(this.context);
       animation.render(this.context);
