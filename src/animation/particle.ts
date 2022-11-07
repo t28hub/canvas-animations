@@ -1,4 +1,4 @@
-import { Bounds, Distance, DistanceMeasure, EuclideanDistance, Point } from '../math';
+import { Distance, DistanceMeasure, EuclideanDistance, Point } from '../math';
 
 import { Component, Context } from './component';
 
@@ -6,32 +6,32 @@ export type Options = {
   readonly kind: 'particle';
   readonly radius: number;
   readonly speed: number;
+  readonly color: string;
 };
 
 const defaults: Options = {
   kind: 'particle',
   radius: 1,
   speed: 0.5,
+  color: 'rgba(225, 255, 255, 1.0)',
 };
 
 export class Particle implements Component<Options> {
   private readonly center: Point;
-  private readonly radius: number;
   private velocityX: number;
   private velocityY: number;
 
-  constructor(initialCenter: Point, radius: number, speed: number) {
+  constructor(initialCenter: Point, readonly options: Options) {
     this.center = { ...initialCenter };
-    this.radius = radius;
-    this.velocityX = speed * Math.cos(Math.random() * Math.PI * 2);
-    this.velocityY = speed * Math.sin(Math.random() * Math.PI * 2);
+    this.velocityX = options.speed * Math.cos(Math.random() * Math.PI * 2);
+    this.velocityY = options.speed * Math.sin(Math.random() * Math.PI * 2);
   }
 
   getCenter(): Readonly<Point> {
     return this.center;
   }
 
-  update({ bounds }: Context<Options>) {
+  update({ bounds }: Context) {
     this.center.x += this.velocityX;
     this.center.y += this.velocityY;
 
@@ -46,11 +46,14 @@ export class Particle implements Component<Options> {
     }
   }
 
-  render({ context }: Context<Options>) {
+  render({ context }: Context) {
+    const { color, radius } = this.options;
+    context.fillStyle = color;
     context.beginPath();
-    context.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2, false);
+    context.arc(this.center.x, this.center.y, radius, 0, Math.PI * 2, false);
     context.closePath();
     context.fill();
+    context.restore();
   }
 
   /**
@@ -63,12 +66,12 @@ export class Particle implements Component<Options> {
     return distanceMeasure(this.center, other.center);
   }
 
-  static create(bounds: Bounds, options: Partial<Options> = {}): Particle {
-    const { radius, speed } = { ...defaults, ...options };
+  static create({ bounds }: Context, options: Partial<Options> = {}): Particle {
     const center = {
       x: bounds.min.x + Math.random() * bounds.extentX,
       y: bounds.min.y + Math.random() * bounds.extentY,
     };
-    return new Particle(center, radius, speed);
+    const mergedOptions: Options = { ...defaults, ...options };
+    return new Particle(center, mergedOptions);
   }
 }

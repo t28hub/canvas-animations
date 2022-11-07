@@ -10,26 +10,23 @@ const NO_ANIMATION_ID = Number.NEGATIVE_INFINITY;
  * Types rendering drawable components to the given rendering context.
  */
 export class CanvasPlayer implements Player {
-  private readonly bounds: Bounds;
-  private readonly context: RenderingContext2D;
+  private readonly context: Context;
   private animationId: number;
 
   constructor(canvas: CanvasElement) {
-    this.bounds = new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height });
-    this.context = CanvasPlayer.ensureContext2D(canvas);
+    this.context = {
+      bounds: new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height }),
+      context: CanvasPlayer.ensureContext2D(canvas),
+    };
     this.animationId = NO_ANIMATION_ID;
   }
 
-  play<T extends Options>(options: T) {
-    const animation = create(this.bounds, options);
-    const context: Context<T> = {
-      bounds: this.bounds,
-      context: this.context,
-      options,
-    };
+  play<T extends Options>(options: Partial<T>) {
+    const animation = create(this.context, options);
+    console.info({ animation });
     const frame = () => {
-      animation.update(context);
-      animation.render(context);
+      animation.update(this.context);
+      animation.render(this.context);
       this.animationId = requestAnimationFrame(frame);
     };
     frame();
@@ -45,12 +42,6 @@ export class CanvasPlayer implements Player {
     if (!context) {
       throw new TypeError(`Failed to retrieve 2d context from canvas(${canvas})`);
     }
-
-    context.lineCap = 'round';
-    context.lineWidth = 1;
-    context.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-    context.save();
     return context;
   }
 }

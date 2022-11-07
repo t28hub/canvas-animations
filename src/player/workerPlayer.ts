@@ -11,7 +11,7 @@ export class WorkerPlayer implements Player {
     this.worker = new PlayerWorker();
   }
 
-  play<T extends Options>(options: T) {
+  play<T extends Options>(options: Partial<T>) {
     const message: MessageType<T> = {
       canvas: this.canvas,
       options,

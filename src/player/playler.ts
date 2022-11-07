@@ -9,7 +9,7 @@ export interface Player {
    *
    * @param options The animation options.
    */
-  play<T extends Options>(options: T): void;
+  play<T extends Options>(options: Partial<T>): void;
 
   /**
    * Stop the current animation.

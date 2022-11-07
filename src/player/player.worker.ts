@@ -6,7 +6,7 @@ declare const self: DedicatedWorkerGlobalScope;
 
 export type MessageType<T extends Options> = {
   readonly canvas: OffscreenCanvas;
-  readonly options: T;
+  readonly options: Partial<T>;
 };
 
 self.onmessage = <T extends Options>(message: MessageEvent<MessageType<T>>) => {

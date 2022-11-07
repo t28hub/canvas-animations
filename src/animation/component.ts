@@ -4,7 +4,7 @@ import { RenderingContext2D } from '../types';
 /**
  * Type representing animation context.
  */
-export type Context<T> = {
+export type Context = {
   /**
    * The current bounds.
    */
@@ -14,28 +14,25 @@ export type Context<T> = {
    * The current rendering 2d context.
    */
   readonly context: RenderingContext2D;
-
-  /**
-   * The animation options.
-   */
-  readonly options: T;
 };
 
 /**
  * Animation component interface.
  */
 export interface Component<T> {
+  readonly options: T;
+
   /**
    * Update the current component.
    *
    * @param context The current context.
    */
-  update(context: Context<T>): void;
+  update(context: Context): void;
 
   /**
    * Render the current component.
    *
    * @param context The current context.
    */
-  render(context: Context<T>): void;
+  render(context: Context): void;
 }

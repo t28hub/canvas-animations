@@ -1,7 +1,8 @@
-import { Bounds, Point } from '../math';
+import { Point } from '../math';
+import { RenderingContext2D } from '../types';
 
 import { Component, Context } from './component';
-import { Particle, Options as ParticleOptions } from './particle';
+import { Particle } from './particle';
 
 /**
  * The options for {@link Network}.
@@ -26,42 +27,56 @@ export type Options = {
    * The speed of particles.
    */
   readonly speed: number;
+
+  /**
+   * The color of particles.
+   */
+  readonly fillColor: string;
+
+  /**
+   * The color of lines.
+   */
+  readonly lineColor: string;
+
+  /**
+   * The width of lines.
+   */
+  readonly lineWidth: number;
 };
 
 /**
  * The default options of {@link Options}.
  */
-const defaults: Required<Options> = {
+const defaults: Options = {
   kind: 'network',
   amount: 100,
   radius: 1,
   speed: 0.5,
+  fillColor: 'rgba(255, 255, 255, 1.0)',
+  lineColor: 'rgba(255, 255, 255, 1.0)',
+  lineWidth: 1.0,
 };
 
 /**
  * The network animation implementation.
  */
 export class Network implements Component<Options> {
-  constructor(private readonly particles: ReadonlyArray<Particle>) {}
+  constructor(private readonly particles: ReadonlyArray<Particle>, readonly options: Options) {}
 
-  update(_: Context<Options>) {}
+  update(_: Context) {}
 
-  render(context: Context<Options>) {
-    const { bounds, context: renderingContext, options } = context;
+  render(context: Context) {
+    const { bounds, context: renderingContext } = context;
     renderingContext.clearRect(bounds.min.x, bounds.min.y, bounds.extentX, bounds.extentY);
 
-    const particleContext: Context<ParticleOptions> = {
-      ...context,
-      options: { ...options, kind: 'particle' },
-    };
     this.particles.forEach((particle: Particle) => {
-      particle.update(particleContext);
-      particle.render(particleContext);
+      particle.update(context);
+      particle.render(context);
       this.drawLines(context, particle);
     });
   }
 
-  private drawLines(context: Context<Options>, particle: Particle) {
+  private drawLines(context: Context, particle: Particle) {
     const index = this.particles.indexOf(particle);
     if (index <= 0) {
       return;
@@ -82,31 +97,26 @@ export class Network implements Component<Options> {
     }
   }
 
-  private drawLine(
-    renderingContext: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
-    point1: Point,
-    point2: Point,
-  ) {
+  private drawLine(renderingContext: RenderingContext2D, point1: Point, point2: Point) {
+    const { lineColor, lineWidth } = this.options;
+    renderingContext.lineCap = 'round';
+    renderingContext.lineWidth = lineWidth;
+    renderingContext.strokeStyle = lineColor;
     renderingContext.beginPath();
     renderingContext.moveTo(point1.x, point1.y);
     renderingContext.lineTo(point2.x, point2.y);
     renderingContext.stroke();
     renderingContext.closePath();
+    renderingContext.restore();
   }
 
-  /**
-   * Instantiate {@link Network}
-   *
-   * @param bounds
-   * @param options
-   */
-  static create(bounds: Bounds, options: Partial<Options> = {}): Network {
-    const { amount, radius, speed } = { ...defaults, ...options };
+  static create(context: Context, options: Partial<Options> = {}): Network {
+    const mergedOptions: Options = { ...defaults, ...options };
     const particles = [];
-    for (let i = 0; i < amount; i++) {
-      const particle = Particle.create(bounds, { radius, speed });
+    for (let i = 0; i < mergedOptions.amount; i++) {
+      const particle = Particle.create(context, { radius: mergedOptions.radius, speed: mergedOptions.speed });
       particles.push(particle);
     }
-    return new Network(particles);
+    return new Network(particles, mergedOptions);
   }
 }
