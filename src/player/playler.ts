@@ -15,4 +15,6 @@ export interface Player {
    * Stop the current animation.
    */
   stop(): void;
+
+  resize(width: number, height: number): void;
 }

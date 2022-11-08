@@ -41,10 +41,22 @@ export class Particle implements Component<Options> {
     if (bounds.contains(this.center)) {
       return;
     }
-    if (!bounds.containsX(this.center.x)) {
+
+    if (this.center.x < bounds.min.x) {
+      this.center.x = bounds.min.x;
       this.velocityX *= -1.0;
     }
-    if (!bounds.containsY(this.center.y)) {
+    if (this.center.x > bounds.max.x) {
+      this.center.x = bounds.max.x;
+      this.velocityX *= -1.0;
+    }
+
+    if (this.center.y < bounds.min.y) {
+      this.center.y = bounds.min.y;
+      this.velocityY *= -1.0;
+    }
+    if (this.center.y > bounds.max.y) {
+      this.center.y = bounds.max.y;
       this.velocityY *= -1.0;
     }
   }

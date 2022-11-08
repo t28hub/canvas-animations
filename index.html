@@ -25,7 +25,13 @@
       const canvas = document.getElementById('screen');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      create(canvas).play({ kind: 'network', amount: 250, radius: 1, speed: 0.1 });
+
+      const player = create(canvas);
+      player.play({ kind: 'network', amount: 250, radius: 1, speed: 1 });
+
+      window.addEventListener('resize', () => {
+        player.resize(window.innerWidth, window.innerHeight);
+      });
 
       // Configure stats.js
       const stats = new Stats();

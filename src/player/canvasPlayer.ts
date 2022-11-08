@@ -10,25 +10,33 @@ const NO_ANIMATION_ID = Number.NEGATIVE_INFINITY;
  * Types rendering drawable components to the given rendering context.
  */
 export class CanvasPlayer implements Player {
-  private readonly context: Context;
+  private readonly context: RenderingContext2D;
   private animationId: number;
 
   constructor(canvas: CanvasElement) {
-    this.context = {
-      bounds: new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height }),
-      context: CanvasPlayer.ensureContext2D(canvas),
-    };
+    this.context = CanvasPlayer.ensureContext2D(canvas);
     this.animationId = NO_ANIMATION_ID;
   }
 
   play<T extends Options>(options: Partial<T>) {
-    const animation = create(this.context, options);
+    const canvas = this.context.canvas;
+    const bounds = new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height });
+    const animation = create({ bounds, context: this.context }, options);
+
     const frame = () => {
-      animation.update(this.context);
-      animation.render(this.context);
+      const canvas = this.context.canvas;
+      const bounds = new Bounds({ x: 0, y: 0 }, { x: canvas.width, y: canvas.height });
+      const context: Context = { bounds, context: this.context };
+      animation.update(context);
+      animation.render(context);
       this.animationId = requestAnimationFrame(frame);
     };
     frame();
+  }
+
+  resize(width: number, height: number) {
+    this.context.canvas.width = width;
+    this.context.canvas.height = height;
   }
 
   stop() {

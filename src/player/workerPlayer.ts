@@ -1,25 +1,37 @@
 import { Options } from '../animation';
 
-import { MessageType } from './player.worker';
-import PlayerWorker from './player.worker?worker&inline';
+import { PlayEvent, ResizeEvent, StopEvent } from './events';
 import { Player } from './playler';
+import PlayerWorker from './worker?worker&inline';
+
+const playerWorker = new PlayerWorker();
 
 export class WorkerPlayer implements Player {
-  private readonly worker: Worker;
-
-  constructor(private readonly canvas: OffscreenCanvas) {
-    this.worker = new PlayerWorker();
-  }
+  constructor(private readonly canvas: OffscreenCanvas, private readonly worker: Worker = playerWorker) {}
 
   play<T extends Options>(options: Partial<T>) {
-    const message: MessageType<T> = {
-      canvas: this.canvas,
-      options,
+    const event: PlayEvent<T> = {
+      type: 'play',
+      payload: {
+        canvas: this.canvas,
+        options,
+      },
     };
-    this.worker.postMessage(message, [this.canvas]);
+    this.worker.postMessage(event, [this.canvas]);
   }
 
   stop() {
-    this.worker.terminate();
+    const event: StopEvent = {
+      type: 'stop',
+    };
+    this.worker.postMessage(event);
+  }
+
+  resize(width: number, height: number) {
+    const event: ResizeEvent = {
+      type: 'resize',
+      payload: { width, height },
+    };
+    this.worker.postMessage(event);
   }
 }
