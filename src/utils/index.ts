@@ -1,3 +1,5 @@
+export { type ID, id } from './id';
+
 /**
  * Check whether the given value is undefined.
  *
